@@ -1,0 +1,12 @@
+student_id,age,study_hours,attendance,department,internet_access,previous_score,passed
+
+1,18,5,90,CS,yes,88,yes
+2,19,2,70,IT,no,60,no
+3,18,,95,CS,yes,91,yes
+4,20,8,80,ENG,yes,77,yes
+5,19,2,70,IT,no,60,no
+6,21,1,40,BUS,no,45,no
+7,20,6,85,CS,yes,,yes
+8,18,4,88,ENG,yes,81,yes
+9,18,4,88,ENG,yes,81,yes
+10,22,3,50,BUS,,52,no
