@@ -1,5 +1,4 @@
 student_id,age,study_hours,attendance,department,internet_access,previous_score,passed
-
 1,18,5,90,CS,yes,88,yes
 2,19,2,70,IT,no,60,no
 3,18,,95,CS,yes,91,yes

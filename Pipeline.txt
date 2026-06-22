@@ -1,0 +1,32 @@
+CSV
+↓
+load_csv()
+
+↓
+clean()
+(remove duplicates
+fill missing)
+
+↓
+split()
+
+↓
+fit_encoder(X_train)
+transform(X_train)
+
+↓
+transform(X_test)
+
+↓
+fit_normalizer(X_train)
+transform(X_train)
+
+↓
+transform(X_test)
+
+↓
+X_train
+y_train
+
+X_test
+y_test
