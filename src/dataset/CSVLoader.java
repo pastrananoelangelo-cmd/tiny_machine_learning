@@ -45,8 +45,12 @@ public class CSVLoader {
                 // Match headers
                 for (int i = 0; i < headers.length; i++) {
                     if (values.length > i) {
-                        row.put(headers[i].trim(),
+                        if (!values[i].equals("")) {
+                            row.put(headers[i].trim(),
                                 values[i].trim());
+                        } else {
+                            row.put(headers[i], null);
+                        }
                     } else {
                         // Fill missing
                         row.put(headers[i], null);

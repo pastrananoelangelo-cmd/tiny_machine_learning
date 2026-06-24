@@ -1,3 +1,4 @@
+import clean.MissingValueCleaner;
 import core.Dataset;
 import dataset.CSVLoader;
 
@@ -6,13 +7,29 @@ import dataset.CSVLoader;
 public class Main {
     public static void main(String[] args) {
         Dataset dataset; // Create Dataset Instance
+        Dataset cleaned; // Create Clean Dataset Instance
         String filePath = "data/student.csv"; // Filepath
 
         // Load Dataset
         dataset = CSVLoader.load(filePath);
         // System.out.println(dataset);
+        // System.out.println();
 
-       // Print Dataset
-       dataset.printPreview(5);
+       // Print Original Dataset
+       System.out.println("=== ORIGINAL ===");
+       dataset.printPreview(10);
+       System.out.println();
+
+       // Create cleaner
+       MissingValueCleaner cleaner = new MissingValueCleaner();
+
+       // Clean
+       cleaned = cleaner.clean(dataset);
+
+       // Preview Cleaned Dataset
+       System.out.println("=== CLEANED ===");
+       cleaned.printPreview(10);
+       System.out.println();
+
     }
 }
