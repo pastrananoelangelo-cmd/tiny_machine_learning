@@ -5,6 +5,7 @@ import core.Dataset;
 import java.util.*;
 
 public class Encoder {
+    Set<String> encodedColumns = new HashSet<>();
 
     public Dataset encoder(Dataset cleaned) {
         MissingValueCleaner missValueCleaner = new MissingValueCleaner();
@@ -26,6 +27,7 @@ public class Encoder {
             }
 
             if (dataType.equals("CATEGORICAL")) {
+                setEncodedColumns(column);
                 encodeColumn(column, rows);
             }
         }
@@ -50,5 +52,13 @@ public class Encoder {
 
             row.put(column, map.get(current));
         }
+    }
+
+    public void setEncodedColumns(String column) {
+        encodedColumns.add(column);
+    }
+
+    public Set<String> getEncodedColumns() {
+        return encodedColumns;
     }
 }

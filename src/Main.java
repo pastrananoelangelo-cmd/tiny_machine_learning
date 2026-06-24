@@ -2,6 +2,7 @@ import clean.DataCleaner;
 import core.Dataset;
 import dataset.CSVLoader;
 import transform.Encoder;
+import transform.Normalizer;
 
 // import java.util.*;
 
@@ -10,6 +11,7 @@ public class Main {
         Dataset dataset; // Create Dataset Instance
         Dataset cleaned; // Create Clean Dataset Instance
         Dataset encoded; // Create Encoded Dataset Instance
+        Dataset normalized; // Create Normalized Dataset Instance
         String filePath = "data/student.csv"; // Filepath
 
         // Load Dataset
@@ -35,10 +37,19 @@ public class Main {
         Encoder encode = new Encoder();
         encoded = encode.encoder(cleaned);
 
-        // Print Original Dataset
+        // Print Encoded Dataset
         System.out.println("=== ENCODED ===");
         encoded.printPreview(10);
         System.out.println();
-        
+
+        // Create Normalizer
+        Normalizer normalize = new Normalizer();
+        normalized = normalize.normalizer(encoded, encode);
+
+
+        // Print Normalized Dataset
+        System.out.println("=== NORMALIZED ===");
+        normalized.printPreview(10);
+        System.out.println();
     }
 }
