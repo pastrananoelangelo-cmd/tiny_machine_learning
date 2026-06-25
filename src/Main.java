@@ -3,6 +3,7 @@ import core.Dataset;
 import dataset.CSVLoader;
 import transform.Encoder;
 import transform.Normalizer;
+import transform.TrainTestSplit;
 
 // import java.util.*;
 
@@ -46,10 +47,13 @@ public class Main {
         Normalizer normalize = new Normalizer();
         normalized = normalize.normalizer(encoded, encode);
 
-
         // Print Normalized Dataset
         System.out.println("=== NORMALIZED ===");
         normalized.printPreview(10);
         System.out.println();
+
+        // Create TrainTestSplit
+        TrainTestSplit splitter = new TrainTestSplit();
+        TrainTestSplit.SplitDataset split = splitter.split(normalized);
     }
 }
