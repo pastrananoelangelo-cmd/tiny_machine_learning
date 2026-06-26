@@ -1,59 +1,13 @@
-import clean.DataCleaner;
-import core.Dataset;
-import dataset.CSVLoader;
-import transform.Encoder;
-import transform.Normalizer;
-import transform.TrainTestSplit;
+import pipeline.DataPipeline;
+import transform.FeatureTargetDataset;
 
 // import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Dataset dataset; // Create Dataset Instance
-        Dataset cleaned; // Create Clean Dataset Instance
-        Dataset encoded; // Create Encoded Dataset Instance
-        Dataset normalized; // Create Normalized Dataset Instance
-        String filePath = "data/student.csv"; // Filepath
+        String filePath = "data/student.csv";
 
-        // Load Dataset
-        dataset = CSVLoader.load(filePath);
-        // System.out.println(dataset);
-        // System.out.println();
-
-        // Print Original Dataset
-        System.out.println("=== ORIGINAL ===");
-        dataset.printPreview(10);
-        System.out.println();
-
-        // Create Cleaner
-        DataCleaner cleaner = new DataCleaner();
-        cleaned = cleaner.clean(dataset);
-
-        // Preview Cleaned Dataset
-        System.out.println("=== CLEANED ===");
-        cleaned.printPreview(10);
-        System.out.println();
-        
-        // Create Encoder
-        Encoder encode = new Encoder();
-        encoded = encode.encoder(cleaned);
-
-        // Print Encoded Dataset
-        System.out.println("=== ENCODED ===");
-        encoded.printPreview(10);
-        System.out.println();
-
-        // Create Normalizer
-        Normalizer normalize = new Normalizer();
-        normalized = normalize.normalizer(encoded, encode);
-
-        // Print Normalized Dataset
-        System.out.println("=== NORMALIZED ===");
-        normalized.printPreview(10);
-        System.out.println();
-
-        // Create TrainTestSplit
-        TrainTestSplit splitter = new TrainTestSplit();
-        TrainTestSplit.SplitDataset split = splitter.split(normalized);
+        DataPipeline pipeline = new DataPipeline();
+        FeatureTargetDataset data = pipeline.run(filePath);
     }
 }

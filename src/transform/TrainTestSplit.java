@@ -25,7 +25,6 @@ public class TrainTestSplit {
 
         build(train, passed, notPassed, 0, passNum, 0, notPassNum);
         build(test, passed, notPassed, passNum, passed.size(), notPassNum, notPassed.size());
-
         
         shuffle(train.getRows());
         shuffle(test.getRows());
