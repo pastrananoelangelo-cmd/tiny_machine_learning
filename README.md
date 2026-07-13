@@ -1,14 +1,36 @@
-# ML Data Preprocessing Playground — Phase A (Data Layer)
+# Tiny Machine Learning Framework (Java)
 
 ## Overview
 
-This project is a machine learning preprocessing playground built from scratch in Java.
+This project is a machine learning framework built completely from scratch in Java.
 
-The goal of Phase A is to understand and implement everything that happens before a machine learning model is trained.
+The purpose of this project is not to compete with existing machine learning libraries, but to understand how they are built internally.
 
-No machine learning algorithm is used yet.
+The project is divided into two phases:
 
-Instead, this phase focuses on transforming raw CSV data into training-ready and testing-ready datasets.
+* **Phase A — Data Layer**
+* **Phase B — Learning Layer**
+
+Every component is implemented manually without using machine learning libraries.
+
+---
+
+# Phase A — Data Layer
+
+## Goal
+
+Understand everything that happens before a machine learning model begins learning.
+
+Implemented:
+
+* CSV Loading
+* Missing Value Handling
+* Duplicate Removal
+* Feature Encoding
+* Feature Normalization
+* Train/Test Split
+* Feature/Target Split
+* Data Pipeline Architecture
 
 Final outputs:
 
@@ -19,24 +41,34 @@ Final outputs:
 
 ---
 
-## Goals
+# Phase B — Learning Layer
 
-Learn and implement:
+## Goal
 
-* Loading structured data
-* Data cleaning
-* Missing value handling
-* Duplicate removal
-* Feature encoding
-* Feature normalization
-* Train/Test splitting
-* Feature/Target separation
-* Pipeline architecture
+Understand what machine learning actually means.
+
+Instead of calling an existing ML library, this phase builds the learning process manually.
+
+Implemented:
+
+* Linear Regression
+* Model Interface
+* Weight Initialization
+* Prediction
+* Error Computation
+* Squared Loss
+* Gradient Descent
+* Epoch-based Learning
+* Training Evaluation
+* Testing Evaluation
+
+The objective of this phase is to understand how a machine learning model gradually improves its predictions by adjusting its internal weights.
 
 ---
 
-# Project Pipeline
+# Overall Project Pipeline
 
+```
 dataset.csv
 
 ↓
@@ -62,288 +94,187 @@ FeatureTargetDataset
 
 ↓
 
-X_train / y_train
+LinearRegression
 
-X_test / y_test
+↓
+
+Initialize Weights
+
+↓
+
+Prediction
+
+↓
+
+Error
+
+↓
+
+Weight Update (Gradient Descent)
+
+↓
+
+Repeat for Multiple Epochs
+
+↓
+
+Evaluate
+
+↓
+
+Training Loss
+Testing Loss
+```
 
 ---
 
 # Project Structure
 
+```
 src/
 
 Main.java
 
 pipeline/
-
-* DataPipeline.java
+    DataPipeline.java
 
 dataset/
-
-* CSVLoader.java
+    CSVLoader.java
 
 clean/
-
-* DataCleaner.java
-* MissingValueCleaner.java
-* DuplicateCleaner.java
+    DataCleaner.java
+    MissingValueCleaner.java
+    DuplicateCleaner.java
 
 transform/
+    Transform.java
+    Encoder.java
+    Normalizer.java
+    TrainTestSplit.java
+    FeatureTargetSplit.java
+    FeatureTargetDataset.java
 
-* Transform.java
-* Encoder.java
-* Normalizer.java
-* TrainTestSplit.java
-* FeatureTargetSplit.java
-* FeatureTargetDataset.java
+model/
+    Model.java
+    LinearRegression.java
 
 core/
-
-* Dataset.java
+    Dataset.java
+```
 
 ---
 
-# Components
+# Phase A Components
 
 ## Dataset
 
-Purpose:
-Store tabular data.
+Stores tabular data using:
 
-Structure:
-
+```
 List<Map<String, String>>
+```
 
 Responsibilities:
 
 * Store rows
-* Add rows
-* Preview dataset
-* Access transformed data
+* Preview datasets
+* Provide transformed data
 
 ---
 
 ## CSVLoader
 
-Purpose:
-Load CSV files into Dataset.
-
-Input:
-
-Raw CSV
-
-Output:
-
-Dataset
+Loads CSV files into Dataset.
 
 ---
 
 ## DataCleaner
 
-Purpose:
-Coordinate cleaning steps.
+Coordinates:
 
-Pipeline:
-
-MissingValueCleaner
-
-↓
-
-DuplicateCleaner
-
-Output:
-
-Clean Dataset
+* MissingValueCleaner
+* DuplicateCleaner
 
 ---
 
 ## MissingValueCleaner
 
-Purpose:
-Handle missing values.
-
-Implemented:
-
-Numeric columns:
-
-* Replace null using calculated values
-
-Categorical columns:
-
-* Replace null using detected category
-
 Features:
 
-* Automatic type detection
-* Deep copy protection
-
-Result:
-
-No null values remain.
+* Automatic numeric/categorical detection
+* Numeric value replacement
+* Categorical value replacement
+* Deep-copy protection
 
 ---
 
 ## DuplicateCleaner
 
-Purpose:
-Remove duplicate rows.
-
-Rules:
+Features:
 
 * Ignore student_id
 * Preserve first occurrence
-* Preserve row order
-
-Implementation:
-
-* LinkedHashSet
-* Composite row comparison
-
-Result:
-
-Unique rows only.
+* Preserve dataset order
 
 ---
 
 ## Encoder
 
-Purpose:
-Convert categorical features into numeric representations.
+Converts categorical variables into numerical values.
 
-Rules:
+Strategy:
 
-* Preserve student_id
-* Preserve target column (passed)
-* Encode only predictors
-
-Encoding strategy:
-
-Order of appearance
+* Order of appearance
 
 Example:
 
-department
-
-CS → 0
-IT → 1
-ENG → 2
-BUS → 3
-
-internet_access
-
-yes → 0
-no → 1
-
-Output:
-
-Encoded Dataset
+```
+CS  -> 0
+IT  -> 1
+ENG -> 2
+BUS -> 3
+```
 
 ---
 
 ## Normalizer
 
-Purpose:
-Normalize numeric features.
+Uses Min-Max Scaling:
 
-Method:
+```
+(value - min)
+----------------
+(max - min)
+```
 
-Min-Max Scaling
-
-Formula:
-
-normalized =
-(value − min)
-/
-(max − min)
-
-Rules:
-
-* Skip student_id
-* Skip target column
-* Skip encoded categorical columns
-
-Output:
-
-Values scaled between 0 and 1
+Scales continuous numerical features between 0 and 1.
 
 ---
 
 ## TrainTestSplit
 
-Purpose:
-Split data into training and testing datasets.
-
-Strategy:
+Responsibilities:
 
 * Shuffle rows
+* 80/20 split
 * Preserve target distribution
-* Floor split size
-* 80 / 20 split
-
-Output:
-
-train
-test
-
-Implementation:
-
-SplitDataset wrapper
 
 ---
 
 ## FeatureTargetSplit
 
-Purpose:
-Separate predictors and labels.
+Produces:
 
-Rules:
-
-X:
-
-* Remove student_id
-* Remove passed
-
-y:
-
-* Extract passed
-* Encode:
-
-yes → "1"
-no → "0"
-
-Output:
-
-X_train
-y_train
-
-X_test
-y_test
-
----
-
-## FeatureTargetDataset
-
-Purpose:
-
-Store final preprocessing outputs.
-
-Contains:
-
-Dataset xTrain
-
-List<String> yTrain
-
-Dataset xTest
-
-List<String> yTest
+* X_train
+* y_train
+* X_test
+* y_test
 
 ---
 
 ## Transform
 
-Purpose:
-
-Group all transformation steps.
+Coordinates every preprocessing step.
 
 Pipeline:
 
@@ -361,17 +292,11 @@ TrainTestSplit
 
 FeatureTargetSplit
 
-Output:
-
-FeatureTargetDataset
-
 ---
 
 ## DataPipeline
 
-Purpose:
-
-Single entry point for the application.
+Single entry point for preprocessing.
 
 Flow:
 
@@ -387,33 +312,184 @@ Transform
 
 ↓
 
-Return training-ready data
+Training-ready Dataset
 
 ---
 
-## Main
+# Phase B Components
 
-Purpose:
+## Model Interface
 
-Application entry point.
+Defines the common behavior of every machine learning model.
 
-Example:
+Current operations:
 
-Create DataPipeline
+* fit()
+* predict()
+* evaluate()
 
-↓
-
-Run pipeline
-
-↓
-
-Receive FeatureTargetDataset
+This allows future models (such as Logistic Regression) to follow the same API.
 
 ---
 
-# Concepts Practiced
+## LinearRegression
 
-Data Structures:
+Built completely from scratch.
+
+Responsibilities:
+
+* Initialize feature weights
+* Learn from training data
+* Predict continuous values
+* Update weights using Gradient Descent
+* Evaluate model performance
+
+---
+
+## Weight Initialization
+
+The model initially assumes every feature is equally important.
+
+```
+All weights = 1.0
+```
+
+During training, these weights gradually change to represent the learned importance of every feature.
+
+---
+
+## Prediction
+
+Prediction is computed as:
+
+```
+prediction =
+bias +
+Σ(feature × weight)
+```
+
+Every prediction represents the model's current belief.
+
+---
+
+## Error
+
+Measures how wrong the prediction is.
+
+```
+error = prediction - actual
+```
+
+The error guides how the weights should change.
+
+---
+
+## Loss
+
+Uses Squared Error:
+
+```
+loss = error²
+```
+
+The model uses average loss to measure overall performance.
+
+---
+
+## Gradient Descent
+
+Weights are updated using:
+
+```
+weight =
+weight
+-
+learningRate
+×
+error
+×
+featureValue
+```
+
+The update changes the model's internal beliefs so future predictions become more accurate.
+
+---
+
+## Epochs
+
+The model repeatedly learns from the entire training dataset.
+
+Each epoch:
+
+Training Data
+
+↓
+
+Prediction
+
+↓
+
+Error
+
+↓
+
+Loss
+
+↓
+
+Weight Update
+
+↓
+
+Repeat
+
+As training progresses, the average loss decreases.
+
+---
+
+## Evaluation
+
+After training, the model evaluates both:
+
+* Training Loss
+* Testing Loss
+
+Testing never updates the weights.
+
+Its purpose is to measure how well the learned patterns generalize to unseen data.
+
+---
+
+# Concepts Learned
+
+Machine Learning Concepts
+
+* Features
+* Targets
+* Weights
+* Bias
+* Prediction
+* Error
+* Squared Loss
+* Gradient Descent
+* Learning Rate
+* Epochs
+* Generalization
+* Training vs Testing
+* Overfitting
+
+Software Engineering Concepts
+
+* Interfaces
+* Encapsulation
+* Separation of Concerns
+* Composition
+* Pipeline Design
+* API Design
+* Wrapper Objects
+* Package Organization
+
+Data Structures
 
 * ArrayList
 * HashMap
@@ -421,54 +497,39 @@ Data Structures:
 * HashSet
 * LinkedHashSet
 
-Programming Concepts:
-
-* Deep Copy
-* Mutable vs Immutable Operations
-* Composition
-* Separation of Concerns
-* Encapsulation
-* Pipeline Design
-* Data Transformation
-* Package Organization
-* Wrapper Objects
-
 ---
 
-# Phase A Result
+# Current Result
 
-Input:
+The framework can now:
 
-Raw CSV Dataset
+* Load raw CSV datasets
+* Clean missing values
+* Remove duplicates
+* Encode categorical features
+* Normalize continuous features
+* Split datasets
+* Train a Linear Regression model
+* Learn through Gradient Descent
+* Reduce training loss over multiple epochs
+* Evaluate both training and testing performance
 
-Output:
-
-Training-ready data
-
-* X_train
-* y_train
-* X_test
-* y_test
-
-No machine learning yet.
-
-Only preparing data.
+Every component has been implemented manually in Java to understand the internal mechanics of machine learning.
 
 ---
 
 # Next Phase
 
-Phase B — Model Layer
+## Phase C — Expanding the Learning Layer
+
+Planned additions:
+
+* Logistic Regression
+* Probability Prediction
+* Sigmoid Function
+* Classification Decision Boundary
+* Additional Evaluation Metrics
 
 Goal:
 
-Teach the machine.
-
-Planned direction:
-
-model.train(
-xTrain,
-yTrain,
-xTest,
-yTest
-)
+Understand how classification models extend the same learning principles established in Linear Regression.

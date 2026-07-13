@@ -11,6 +11,7 @@ public class LinearRegression implements Model {
     private static final int EPOCH = 10;
     private final Map<String, Double> weights;
     private final double bias;
+    private double trainingLoss;
 
     public LinearRegression() {
         weights = new LinkedHashMap<>();
@@ -20,7 +21,7 @@ public class LinearRegression implements Model {
     @Override
     public void fit(Dataset xTrain, List<String> yTrain) {
         initializeWeights(xTrain);
-        printWeights();
+        // printWeights();
         
         List<Map<String, String>> rows = xTrain.getRows();
         for (int iter = 0; iter < EPOCH; iter++) {
@@ -46,9 +47,11 @@ public class LinearRegression implements Model {
             System.out.println("Epoch " + (iter + 1));
             System.out.println("Average Loss " + averageLoss);
             System.out.println();
-
-            printWeights();
+            
+            // printWeights();
         }
+
+        printWeights();
 
     }
 
@@ -82,10 +85,6 @@ public class LinearRegression implements Model {
         return prediction;
     }
 
-    private double loss(double error) {
-        return error * error;
-    } 
-
     private void updateWeights(Map<String, String> student, double error) {
         for (String feature : student.keySet()) {
             double value = Double.parseDouble(student.get(feature));
@@ -98,5 +97,25 @@ public class LinearRegression implements Model {
         }
 
         // System.out.println();
+    }
+
+    private double loss(double error) {
+        return error * error;
+    }
+
+    @Override
+    public void evaluate(Dataset xSample, List<String> ySample, String loss) {
+        double averageLoss = 0.0;
+
+        List<Map<String, String>> rows = xSample.getRows();
+        for (int i = 0; i < rows.size(); i++) {
+            Map<String, String> row = rows.get(i);
+            double prediction = predict(row);
+            double actual = Double.parseDouble(ySample.get(i));
+            double error = prediction - actual;
+            averageLoss += loss(error);
+        }
+        averageLoss /= rows.size();
+        System.out.println(loss + ": " + averageLoss);
     }
 }

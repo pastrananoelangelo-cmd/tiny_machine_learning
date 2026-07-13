@@ -10,6 +10,8 @@ public class Main {
         FeatureTargetDataset data = pipeline.run(filePath);
         LinearRegression linearRegression = new LinearRegression();
         linearRegression.fit(data.getXTrain(), data.getYTrain());
+        linearRegression.evaluate(data.getXTrain(), data.getYTrain(), "Training Loss");
+        linearRegression.evaluate(data.getXTest(), data.getYTest(), "Testing Loss");
 
     }
 }

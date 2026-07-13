@@ -13,4 +13,10 @@ public interface Model {
     double predict(
         Map<String, String> sample
     );
+
+    void evaluate(
+        Dataset xSample,
+        List<String> ySample,
+        String loss
+    );
 }
